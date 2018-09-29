@@ -43,7 +43,7 @@
     
     <title>
         
-            XXXX | 
+            Java遍历HashMap的四种方法三种表达 | 
         
         NewMoreYoung
     </title>
@@ -54,7 +54,7 @@
 
     <meta name="format-detection" content="telephone=no"/>
     <meta name="description" itemprop="description" content="charming life!">
-    <meta name="keywords" content="">
+    <meta name="keywords" content=",Java,集合">
     <meta name="theme-color" content="#0097A7">
 
     <!-- Disable Fucking Bloody Baidu Tranformation -->
@@ -215,7 +215,7 @@
     <!-- WebAPP Icons -->
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="application-name" content="NewMoreYoung">
-    <meta name="msapplication-starturl" content="http://bxan.xyz/2018/09/12/XXXX/">
+    <meta name="msapplication-starturl" content="http://bxan.xyz/2018/09/29/Java遍历HashMap的四种方法三种表达/">
     <meta name="msapplication-navbutton-color" content="#0097A7">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="NewMoreYoung">
@@ -230,16 +230,16 @@
     
 
     <!-- The Open Graph protocol -->
-    <meta property="og:url" content="http://bxan.xyz/2018/09/12/XXXX/">
+    <meta property="og:url" content="http://bxan.xyz/2018/09/29/Java遍历HashMap的四种方法三种表达/">
     <meta property="og:type" content="blog">
-    <meta property="og:title" content="XXXX | NewMoreYoung">
+    <meta property="og:title" content="Java遍历HashMap的四种方法三种表达 | NewMoreYoung">
     <meta property="og:image" content="/img/favicon.png">
     <meta property="og:description" content="charming life!">
-    
+    <meta property="og:article:tag" content="Java"> <meta property="og:article:tag" content="集合"> 
 
     
-        <meta property="article:published_time" content="Wed Sep 12 2018 18:55:24 GMT+0800">
-        <meta property="article:modified_time" content="Wed Sep 12 2018 18:55:24 GMT+0800">
+        <meta property="article:published_time" content="Sat Sep 29 2018 09:58:03 GMT+0800">
+        <meta property="article:modified_time" content="Sat Sep 29 2018 09:59:10 GMT+0800">
     
 
     <!-- The Twitter Card protocol -->
@@ -247,7 +247,7 @@
 
     <!-- Add canonical link for SEO -->
     
-        <link rel="canonical" href="http://bxan.xyz/2018/09/12/XXXX/index.html" />
+        <link rel="canonical" href="http://bxan.xyz/2018/09/29/Java遍历HashMap的四种方法三种表达/index.html" />
     
 
     <!-- Structured-data for SEO -->
@@ -259,10 +259,10 @@
 {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
-    "mainEntityOfPage": "http://bxan.xyz/2018/09/12/XXXX/index.html",
-    "headline": "XXXX",
-    "datePublished": "Wed Sep 12 2018 18:55:24 GMT+0800",
-    "dateModified": "Wed Sep 12 2018 18:55:24 GMT+0800",
+    "mainEntityOfPage": "http://bxan.xyz/2018/09/29/Java遍历HashMap的四种方法三种表达/index.html",
+    "headline": "Java遍历HashMap的四种方法三种表达",
+    "datePublished": "Sat Sep 29 2018 09:58:03 GMT+0800",
+    "dateModified": "Sat Sep 29 2018 09:59:10 GMT+0800",
     "author": {
         "@type": "Person",
         "name": "Bingxu An",
@@ -280,7 +280,7 @@
             "url": "/img/favicon.png"
         }
     },
-    "keywords": "",
+    "keywords": ",Java,集合",
     "description": "charming life!",
 }
 </script>
@@ -340,6 +340,15 @@
     <!-- Left aligned menu below button -->
     
     
+    <button id="post-toc-trigger-btn"
+        class="mdl-button mdl-js-button mdl-button--icon">
+        <i class="material-icons">format_list_numbered</i>
+    </button>
+
+    <ul class="post-toc-wrap mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" for="post-toc-trigger-btn" style="max-height:80vh; overflow-y:scroll;">
+        <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Java8遍历HashMap-（普通方法-涉及到lambda表达式和函数式编程）"><span class="post-toc-number">1.</span> <span class="post-toc-text">Java8遍历HashMap （普通方法+涉及到lambda表达式和函数式编程）</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#方法一"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">方法一</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#方法二"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">方法二</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#方法三"><span class="post-toc-number">1.3.</span> <span class="post-toc-text">方法三</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#介绍BiConsumer接口"><span class="post-toc-number">1.3.1.</span> <span class="post-toc-text">介绍BiConsumer接口</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#方法四"><span class="post-toc-number">1.4.</span> <span class="post-toc-text">方法四</span></a></li></ol></li></ol>
+    </ul>
+    
 
 
 
@@ -369,7 +378,7 @@
         
     
             <p class="article-headline-p">
-                XXXX
+                Java遍历HashMap的四种方法三种表达
             </p>
         </div>
 
@@ -388,7 +397,7 @@
     <!-- Author Name & Date -->
     <div>
         <strong>Bingxu An</strong>
-        <span>9月 12, 2018</span>
+        <span>9月 29, 2018</span>
     </div>
 
     <div class="section-spacer"></div>
@@ -406,6 +415,15 @@
 
     <!-- Tags (bookmark) -->
     
+    <button id="article-functions-viewtags-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+        <i class="material-icons" role="presentation">bookmark</i>
+        <span class="visuallyhidden">bookmark</span>
+    </button>
+    <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="article-functions-viewtags-button">
+        <li class="mdl-menu__item">
+        <a class="post_tag-link" href="/tags/Java/">Java</a></li><li class="mdl-menu__item"><a class="post_tag-link" href="/tags/集合/">集合</a>
+    </ul>
+    
 
     <!-- Share -->
     
@@ -420,7 +438,7 @@
 
     <!-- Share Weibo -->
     
-        <a class="post_share-link" href="http://service.weibo.com/share/share.php?appkey=&title=XXXX&url=http://bxan.xyz/2018/09/12/XXXX/index.html&pic=http://bxan.xyz/img/favicon.png&searchPic=false&style=simple" target="_blank">
+        <a class="post_share-link" href="http://service.weibo.com/share/share.php?appkey=&title=Java遍历HashMap的四种方法三种表达&url=http://bxan.xyz/2018/09/29/Java遍历HashMap的四种方法三种表达/index.html&pic=http://bxan.xyz/img/favicon.png&searchPic=false&style=simple" target="_blank">
             <li class="mdl-menu__item">
                 分享到微博
             </li>
@@ -429,7 +447,7 @@
 
     <!-- Share Twitter -->
     
-        <a class="post_share-link" href="https://twitter.com/intent/tweet?text=XXXX&url=http://bxan.xyz/2018/09/12/XXXX/index.html&via=Bingxu An" target="_blank">
+        <a class="post_share-link" href="https://twitter.com/intent/tweet?text=Java遍历HashMap的四种方法三种表达&url=http://bxan.xyz/2018/09/29/Java遍历HashMap的四种方法三种表达/index.html&via=Bingxu An" target="_blank">
             <li class="mdl-menu__item">
                 分享到 Twitter
             </li>
@@ -438,7 +456,7 @@
 
     <!-- Share Facebook -->
     
-        <a class="post_share-link" href="https://www.facebook.com/sharer/sharer.php?u=http://bxan.xyz/2018/09/12/XXXX/index.html" target="_blank">
+        <a class="post_share-link" href="https://www.facebook.com/sharer/sharer.php?u=http://bxan.xyz/2018/09/29/Java遍历HashMap的四种方法三种表达/index.html" target="_blank">
             <li class="mdl-menu__item">
                 分享到 Facebook
             </li>
@@ -447,7 +465,7 @@
 
     <!-- Share Google+ -->
     
-        <a class="post_share-link" href="https://plus.google.com/share?url=http://bxan.xyz/2018/09/12/XXXX/index.html" target="_blank">
+        <a class="post_share-link" href="https://plus.google.com/share?url=http://bxan.xyz/2018/09/29/Java遍历HashMap的四种方法三种表达/index.html" target="_blank">
             <li class="mdl-menu__item">
                 分享到 Google+
             </li>
@@ -472,7 +490,17 @@
                 <!-- Post Content -->
                 <div id="post-content" class="mdl-color-text--grey-700 mdl-card__supporting-text fade out">
     
-        
+        <h1 id="Java8遍历HashMap-（普通方法-涉及到lambda表达式和函数式编程）"><a href="#Java8遍历HashMap-（普通方法-涉及到lambda表达式和函数式编程）" class="headerlink" title="Java8遍历HashMap （普通方法+涉及到lambda表达式和函数式编程）"></a>Java8遍历HashMap （普通方法+涉及到lambda表达式和函数式编程）</h1><p>建立测试用例</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">HashMap&lt;String, Integer&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;(<span class="number">16</span>);</span><br><span class="line">map.put(<span class="string">"A"</span>, <span class="number">1</span>);</span><br><span class="line">map.put(<span class="string">"D"</span>, <span class="number">3</span>);</span><br><span class="line">map.put(<span class="string">"F"</span>, <span class="number">4</span>);</span><br><span class="line">map.put(<span class="string">"B"</span>, <span class="number">99</span>);</span><br></pre></td></tr></table></figure>
+<h2 id="方法一"><a href="#方法一" class="headerlink" title="方法一"></a>方法一</h2><p><strong>先得到entrySet 然后通过 iterator接口,for each或者entries.foreach遍历entrySet</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">Set&lt;Map.Entry&lt;String, Integer&gt;&gt; entries = map.entrySet();</span><br><span class="line">        </span><br><span class="line">System.out.println(<span class="string">"--------------------First----------------------"</span>);</span><br><span class="line">Iterator&lt;Map.Entry&lt;String, Integer&gt;&gt; iterator = entries.iterator();</span><br><span class="line"><span class="keyword">while</span> (iterator.hasNext()) &#123;</span><br><span class="line">    Map.Entry&lt;String, Integer&gt; next = iterator.next();</span><br><span class="line">    System.out.println(next.getKey() + <span class="string">"---&gt;"</span> + next.getValue());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">System.out.println(<span class="string">"--------------------Second----------------------"</span>);</span><br><span class="line"><span class="keyword">for</span> (Map.Entry&lt;String, Integer&gt; m : entries) &#123;</span><br><span class="line">    System.out.println(m.getKey() + <span class="string">"---&gt;"</span> + m.getValue());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">System.out.println(<span class="string">"--------------------Third----------------------"</span>);</span><br><span class="line">entries.forEach((entry) -&gt; System.out.println(entry.getKey() + <span class="string">"---&gt;"</span> + entry.getValue()));</span><br></pre></td></tr></table></figure>
+<h2 id="方法二"><a href="#方法二" class="headerlink" title="方法二"></a>方法二</h2><p> <strong>先得到keySet然后通过 遍历keyset的方法 遍历key 再通过key取得value</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Set&lt;String&gt; keySet = map.keySet();</span><br><span class="line">System.out.println(<span class="string">"方法2"</span>);</span><br><span class="line"></span><br><span class="line">System.out.println(<span class="string">"--------------------First----------------------"</span>);</span><br><span class="line">Iterator&lt;String&gt; iterset = keySet.iterator();</span><br><span class="line"><span class="keyword">while</span> (iterset.hasNext()) &#123;</span><br><span class="line">    String key = iterset.next();</span><br><span class="line">    Integer value = map.get(key);</span><br><span class="line">    System.out.println(key + <span class="string">"---&gt;"</span> + value);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//另外2种表达参考上面的方法1的两种表达</span></span><br></pre></td></tr></table></figure>
+<h2 id="方法三"><a href="#方法三" class="headerlink" title="方法三"></a>方法三</h2><p><strong>直接用map.foreach() 遍历   but 需要实现BiConsumer接口</strong></p>
+<h3 id="介绍BiConsumer接口"><a href="#介绍BiConsumer接口" class="headerlink" title="介绍BiConsumer接口"></a>介绍BiConsumer接口</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">@FunctionalInterfacepublic</span><br><span class="line">interface BiConsumer&lt;T, U&gt; &#123;</span><br><span class="line">    void accept(T t, U u);</span><br><span class="line"></span><br><span class="line">    */</span><br><span class="line">    /**本接口中的accept先执行，传入的BiConsumer 接口类型的参数，后执行accept*//*</span><br><span class="line">    default BiConsumer&lt;T, U&gt; andThen(BiConsumer&lt;? super T, ? super U&gt; after) &#123;</span><br><span class="line">    Objects.requireNonNull(after);</span><br><span class="line">    return (l, r) -&gt; &#123;</span><br><span class="line">    accept(l, r);</span><br><span class="line">    after.accept(l, r);</span><br><span class="line">    &#125;;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">System.out.println(<span class="string">"方法:3"</span>);</span><br><span class="line">map.forEach((k,v)-&gt; System.out.println(k+<span class="string">"---&gt;"</span>+v));</span><br></pre></td></tr></table></figure>
+<h2 id="方法四"><a href="#方法四" class="headerlink" title="方法四"></a>方法四</h2><p><strong>只遍历values 通过map.values()即可</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Collection&lt;Integer&gt; values = map.values();</span><br><span class="line"><span class="keyword">for</span> (Integer integer : values) &#123;</span><br><span class="line">    System.out.println(integer);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
         
     
 

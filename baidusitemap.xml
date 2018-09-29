@@ -4,13 +4,17 @@
 
     
   <url>
-    <loc>http://bxan.xyz/2018/09/12/XXXX/</loc>
-    <lastmod>2018-09-12T10:55:24.181Z</lastmod>
+    <loc>http://bxan.xyz/2018/09/29/Java%E9%81%8D%E5%8E%86HashMap%E7%9A%84%E5%9B%9B%E7%A7%8D%E6%96%B9%E6%B3%95%E4%B8%89%E7%A7%8D%E8%A1%A8%E8%BE%BE/</loc>
+    <lastmod>2018-09-29T01:59:10.175Z</lastmod>
     <data>
         <display>
-        <title>XXXX</title>
-        <pubTime>2018-09-12T10:55:24.000Z</pubTime>
+        <title>Java遍历HashMap的四种方法三种表达</title>
+        <pubTime>2018-09-29T01:58:03.000Z</pubTime>
         
+        <tag>Java</tag>
+         
+        <tag>集合</tag>
+         
          
            
         </display>
@@ -100,9 +104,9 @@
         <title>Java七分钟学习之注解(Annotation)</title>
         <pubTime>2018-07-28T05:48:53.000Z</pubTime>
         
-        <tag>Java</tag>
-         
         <tag>七分钟Java</tag>
+         
+        <tag>Java</tag>
          
         <tag>注解</tag>
          
@@ -124,9 +128,9 @@
         <title>Java 七分钟学习之反射(reflection)机制</title>
         <pubTime>2018-07-28T04:01:24.000Z</pubTime>
         
-        <tag>七分钟Java</tag>
-         
         <tag>反射</tag>
+         
+        <tag>七分钟Java</tag>
          
         <tag>Class类</tag>
          
