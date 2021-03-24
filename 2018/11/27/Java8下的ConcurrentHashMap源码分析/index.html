@@ -1,0 +1,1464 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="Java8下的ConcurrentHashMap源码分析, Bxan&#39;s Blog">
+    <meta name="description" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <title>Java8下的ConcurrentHashMap源码分析 | Bxan&#39;s Blog</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+
+    <script src="/libs/jquery/jquery.min.js"></script>
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">Bxan&#39;s Blog</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>首页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>分类</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>归档</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>留言板</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
+      
+      <span>友情链接</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">Bxan&#39;s Blog</div>
+        <div class="logo-desc">
+            
+            Never really desperate, only the lost of the soul.
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			首页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			分类
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			归档
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			留言板
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			友情链接
+		</a>
+          
+        </li>
+        
+        
+    </ul>
+</div>
+
+
+        </div>
+
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/19.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">Java8下的ConcurrentHashMap源码分析</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        width: 345px;
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        padding: 35px 0 15px 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+        padding-bottom: 30px;
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+
+        position: absolute;
+        right: 23.5vw;
+        display: block;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/Java8/">
+                                <span class="chip bg-color">Java8</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/Java%E6%8A%80%E6%9C%AF/" class="post-category">
+                                Java技术
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2018-11-27
+                </div>
+                
+
+                
+
+                
+
+                
+
+                
+            </div>
+        </div>
+        <hr class="clearfix">
+
+        
+        <!-- 是否加载使用自带的 prismjs. -->
+        <link rel="stylesheet" href="/libs/prism/prism.css">
+        
+
+        
+
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h1 id="ConcurrentHashMap分析"><a href="#ConcurrentHashMap分析" class="headerlink" title="ConcurrentHashMap分析"></a>ConcurrentHashMap分析</h1><p>ConcurrentHashMap是HashMap的线程<strong>安全版本</strong>的实现版本</p>
+<h2 id="Node的数据结构"><a href="#Node的数据结构" class="headerlink" title="Node的数据结构"></a>Node的数据结构</h2><p>想要线程安全就要从数据结构上做调整</p>
+<pre class="line-numbers language-none"><code class="language-none">static class Node&lt;K,V&gt; implements Map.Entry&lt;K,V&gt; &#123;
+    final int hash;
+    final K key;
+    volatile V val;
+    volatile Node&lt;K,V&gt; next;
+
+    Node(int hash, K key, V val, Node&lt;K,V&gt; next) &#123;
+        this.hash &#x3D; hash;
+        this.key &#x3D; key;
+        this.val &#x3D; val;
+        this.next &#x3D; next;
+    &#125;
+
+    public final K getKey()       &#123; return key; &#125;
+    public final V getValue()     &#123; return val; &#125;
+    public final int hashCode()   &#123; return key.hashCode() ^ val.hashCode(); &#125;
+    public final String toString()&#123; return key + &quot;&#x3D;&quot; + val; &#125;
+    public final V setValue(V value) &#123;
+        throw new UnsupportedOperationException();
+    &#125;
+
+    public final boolean equals(Object o) &#123;
+        Object k, v, u; Map.Entry&lt;?,?&gt; e;
+        return ((o instanceof Map.Entry) &amp;&amp;
+                (k &#x3D; (e &#x3D; (Map.Entry&lt;?,?&gt;)o).getKey()) !&#x3D; null &amp;&amp;
+                (v &#x3D; e.getValue()) !&#x3D; null &amp;&amp;
+                (k &#x3D;&#x3D; key || k.equals(key)) &amp;&amp;
+                (v &#x3D;&#x3D; (u &#x3D; val) || v.equals(u)));
+    &#125;
+
+    &#x2F;**
+     * Virtualized support for map.get(); overridden in subclasses.
+     *&#x2F;
+    Node&lt;K,V&gt; find(int h, Object k) &#123;
+        Node&lt;K,V&gt; e &#x3D; this;
+        if (k !&#x3D; null) &#123;
+            do &#123;
+                K ek;
+                if (e.hash &#x3D;&#x3D; h &amp;&amp;
+                    ((ek &#x3D; e.key) &#x3D;&#x3D; k || (ek !&#x3D; null &amp;&amp; k.equals(ek))))
+                    return e;
+            &#125; while ((e &#x3D; e.next) !&#x3D; null);
+        &#125;
+        return null;
+    &#125;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="Table（位桶）的初始化"><a href="#Table（位桶）的初始化" class="headerlink" title="Table（位桶）的初始化"></a>Table（位桶）的初始化</h2><p><strong>重要的变量：sizeCtl。</strong></p>
+<ul>
+<li><p>sizeCtl是一个用于同步多个线程的<strong>共享变量</strong>，如果它的当前值为负数，则说明table正在被某个线程初始化或者扩容</p>
+</li>
+<li><p>如果某个线程想要初始化table或者对table扩容，需要去竞争sizeCtl这个共享变量，获得变量的线程才有许可去进行接下来的操作</p>
+</li>
+<li><p>volatile关键字的作用时确保被该关键字修饰的<strong>共享变量的可见性</strong>，以及<strong>避免指令重排</strong>。</p>
+<p>也就是说，java线程内存模型保证了<strong>所有线程</strong>看到该变量的值是<strong>唯一</strong>的。</p>
+</li>
+</ul>
+<pre class="line-numbers language-none"><code class="language-none">private transient volatile int sizeCtl;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p><strong>table</strong></p>
+<p>有volatile关键字修饰</p>
+<p><code>    transient volatile Node&lt;K,V&gt;[] table;</code></p>
+<p> <em>初始化方法</em></p>
+<pre class="line-numbers language-none"><code class="language-none">private final Node&lt;K,V&gt;[] initTable() &#123;
+    Node&lt;K,V&gt;[] tab; int sc;
+    while ((tab &#x3D; table) &#x3D;&#x3D; null || tab.length &#x3D;&#x3D; 0) &#123;
+        if ((sc &#x3D; sizeCtl) &lt; 0)
+            Thread.yield(); &#x2F;&#x2F; lost initialization race; just spin
+        else if (U.compareAndSwapInt(this, SIZECTL, sc, -1)) &#123;
+            try &#123;
+                if ((tab &#x3D; table) &#x3D;&#x3D; null || tab.length &#x3D;&#x3D; 0) &#123;
+                    int n &#x3D; (sc &gt; 0) ? sc : DEFAULT_CAPACITY;
+                    @SuppressWarnings(&quot;unchecked&quot;)
+                    Node&lt;K,V&gt;[] nt &#x3D; (Node&lt;K,V&gt;[])new Node&lt;?,?&gt;[n];
+                    table &#x3D; tab &#x3D; nt;
+                    sc &#x3D; n - (n &gt;&gt;&gt; 2);
+                &#125;
+            &#125; finally &#123;
+                sizeCtl &#x3D; sc;
+            &#125;
+            break;
+        &#125;
+    &#125;
+    return tab;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="size方法"><a href="#size方法" class="headerlink" title="size方法"></a>size方法</h2><p>可以看出来<strong>最终的size是baseCount+counterCell</strong></p>
+<pre class="line-numbers language-none"><code class="language-none">public int size() &#123;
+    long n &#x3D; sumCount();
+    return ((n &lt; 0L) ? 0 :
+            (n &gt; (long)Integer.MAX_VALUE) ? Integer.MAX_VALUE :
+            (int)n);
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<hr>
+<p><strong>变量讲解</strong></p>
+<p><em>baseCount</em></p>
+<ul>
+<li>当没有争用时，使用这个变量计数。一个 volatile 的变量，在 addCount 方法中会使用它，而 addCount 方法在 <strong>put</strong> 结束后会调用。在 addCount 方法中，会对这个变量做 CAS 加法。</li>
+<li>但是如果并发导致 CAS 失败了，怎么办呢？使用 counterCells。详情看文章put方法内的更新数量段。</li>
+</ul>
+<pre class="line-numbers language-none"><code class="language-none">private transient volatile long baseCount;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p><em>CounterCell</em></p>
+<pre class="line-numbers language-none"><code class="language-none">@sun.misc.Contended static final class CounterCell &#123;
+    volatile long value;
+    CounterCell(long x) &#123; value &#x3D; x; &#125;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>@sun.misc.Contended这个注解就牛逼了，通过追加字节码，<strong>填充满整个缓存行可以优化性能</strong>，这种方式可以避免伪共享，避免了多个变量写到了同一个缓存行中引起互相锁定（追加多少？是否有用？ 取决于处理器）</p>
+<blockquote>
+<p>避免伪共享(false sharing)。<br>先引用个伪共享的解释：<br>缓存系统中是以缓存行（cache line）为单位存储的。缓存行是2的整数幂个连续字节，<br>一般为32-256个字节。最常见的缓存行大小是64个字节。当多线程修改互相独立的变量时，<br>如果这些变量共享同一个缓存行，就会无意中影响彼此的性能，这就是伪共享。</p>
+</blockquote>
+<p>所以伪共享对性能危害极大。</p>
+<p>JDK 8 版本之前没有这个注解，Doug Lea 使用拼接来解决这个问题，把缓存行加满，让缓存之间的修改互不影响。</p>
+<p><strong>@sun.misc.Contended 注解标识，</strong>这个注解是防止伪共享的。是 1.8 新增的。使用时，需要加上 <code>-XX:-RestrictContended</code> 参数。</p>
+<hr>
+<p><strong>sumCount源码</strong></p>
+<pre class="line-numbers language-none"><code class="language-none">final long sumCount() &#123;
+    CounterCell[] as &#x3D; counterCells; 
+    CounterCell a;
+    long sum &#x3D; baseCount;
+    if (as !&#x3D; null) &#123;
+        for (int i &#x3D; 0; i &lt; as.length; ++i) &#123;
+            if ((a &#x3D; as[i]) !&#x3D; null)
+                sum +&#x3D; a.value;
+        &#125;
+    &#125;
+    return sum;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="get方法"><a href="#get方法" class="headerlink" title="get方法"></a>get方法</h2><p>看起来和HashMap的get方法没什么区别，并发下的读一般是没有什么问题的，只要保证了共享变量的可见性，参考Node的实现的确如此。</p>
+<p>且table数组是被volatile关键字修饰的，这就代表我们不需要担心table数组的线程可见性问题，也就没有必要再加锁来实现并发了。</p>
+<p>所以该段代码并没有通过锁来实现，因为使用了🔒效率低下。</p>
+<pre class="line-numbers language-none"><code class="language-none">public V get(Object key) &#123;
+      Node&lt;K,V&gt;[] tab; Node&lt;K,V&gt; e, p; int n, eh; K ek;
+      int h &#x3D; spread(key.hashCode());
+      if ((tab &#x3D; table) !&#x3D; null &amp;&amp; (n &#x3D; tab.length) &gt; 0 &amp;&amp;
+          (e &#x3D; tabAt(tab, (n - 1) &amp; h)) !&#x3D; null) &#123;
+          if ((eh &#x3D; e.hash) &#x3D;&#x3D; h) &#123;
+              if ((ek &#x3D; e.key) &#x3D;&#x3D; key || (ek !&#x3D; null &amp;&amp; key.equals(ek)))
+                  return e.val;
+          &#125;
+          else if (eh &lt; 0)
+              return (p &#x3D; e.find(h, key)) !&#x3D; null ? p.val : null;
+          while ((e &#x3D; e.next) !&#x3D; null) &#123;
+              if (e.hash &#x3D;&#x3D; h &amp;&amp;
+                  ((ek &#x3D; e.key) &#x3D;&#x3D; key || (ek !&#x3D; null &amp;&amp; key.equals(ek))))
+                  return e.val;
+          &#125;
+      &#125;
+      return null;
+  &#125;
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="put方法"><a href="#put方法" class="headerlink" title="put方法"></a>put方法</h2><p>put方法就有学问了，因为线程不安全大多发生在写的时候，会发生不一致问题。观看源码发现用了<strong>锁</strong>！！！！！</p>
+<p>锁住了根据索引取出的 Node节点！</p>
+<pre class="line-numbers language-none"><code class="language-none">synchronized (f) <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>ConcurrentHashMap和HashMap的区别还有一点，就是HashMap允许一个key和value为null，而ConcurrentHashMap则不允许key和value为null，如果发现key或者value为null，则会抛出NPE。 因为判断key==null在多线程环境下会引发一系列问题，key的值在某个时间点上可能是null也可能不是，所以ConcurrentHashMap禁止键null。</p>
+<pre class="line-numbers language-none"><code class="language-none">public V put(K key, V value) &#123;
+    return putVal(key, value, false);
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-none"><code class="language-none">final V putVal(K key, V value, boolean onlyIfAbsent) &#123;
+    if (key &#x3D;&#x3D; null || value &#x3D;&#x3D; null) throw new NullPointerException();
+    int hash &#x3D; spread(key.hashCode());
+    int binCount &#x3D; 0;
+    for (Node&lt;K,V&gt;[] tab &#x3D; table;;) &#123;
+        Node&lt;K,V&gt; f; int n, i, fh;
+        if (tab &#x3D;&#x3D; null || (n &#x3D; tab.length) &#x3D;&#x3D; 0)
+            tab &#x3D; initTable();
+        else if ((f &#x3D; tabAt(tab, i &#x3D; (n - 1) &amp; hash)) &#x3D;&#x3D; null) &#123;
+            if (casTabAt(tab, i, null,
+                         new Node&lt;K,V&gt;(hash, key, value, null)))
+                break;                   &#x2F;&#x2F; no lock when adding to empty bin
+        &#125;
+        else if ((fh &#x3D; f.hash) &#x3D;&#x3D; MOVED)
+            tab &#x3D; helpTransfer(tab, f);
+        else &#123;
+            V oldVal &#x3D; null;
+            synchronized (f) &#123;
+                if (tabAt(tab, i) &#x3D;&#x3D; f) &#123;
+                    if (fh &gt;&#x3D; 0) &#123;
+                        binCount &#x3D; 1;
+                        for (Node&lt;K,V&gt; e &#x3D; f;; ++binCount) &#123;
+                            K ek;
+                            if (e.hash &#x3D;&#x3D; hash &amp;&amp;
+                                ((ek &#x3D; e.key) &#x3D;&#x3D; key ||
+                                 (ek !&#x3D; null &amp;&amp; key.equals(ek)))) &#123;
+                                oldVal &#x3D; e.val;
+                                if (!onlyIfAbsent)
+                                    e.val &#x3D; value;
+                                break;
+                            &#125;
+                            Node&lt;K,V&gt; pred &#x3D; e;
+                            if ((e &#x3D; e.next) &#x3D;&#x3D; null) &#123;
+                                pred.next &#x3D; new Node&lt;K,V&gt;(hash, key,
+                                                          value, null);
+                                break;
+                            &#125;
+                        &#125;
+                    &#125;
+                    else if (f instanceof TreeBin) &#123;
+                        Node&lt;K,V&gt; p;
+                        binCount &#x3D; 2;
+                        if ((p &#x3D; ((TreeBin&lt;K,V&gt;)f).putTreeVal(hash, key,
+                                                       value)) !&#x3D; null) &#123;
+                            oldVal &#x3D; p.val;
+                            if (!onlyIfAbsent)
+                                p.val &#x3D; value;
+                        &#125;
+                    &#125;
+                &#125;
+            &#125;
+            if (binCount !&#x3D; 0) &#123;
+                if (binCount &gt;&#x3D; TREEIFY_THRESHOLD)
+                    treeifyBin(tab, i);
+                if (oldVal !&#x3D; null)
+                    return oldVal;
+                break;
+            &#125;
+        &#125;
+    &#125;
+    addCount(1L, binCount);
+    return null;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="更新数量"><a href="#更新数量" class="headerlink" title="更新数量"></a>更新数量</h3><p>HashMap中的数量<strong>直接 ++size</strong>即可。<strong>然ConcurrentHashMap 不是这样的</strong></p>
+<p>数量是共享的，涉及到线程安全问题。</p>
+<pre class="line-numbers language-none"><code class="language-none">addCount(1L, binCount);<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>ConcurrentHashMap维护baseCount来表示当前的记录数量，这在后面获取记录数量的size方法中会用到，而在put操作和remove操作的时候回通过调用方法addCount来更新它。</p>
+<pre class="line-numbers language-none"><code class="language-none">private final void addCount(long x, int check) &#123;
+    CounterCell[] as; long b, s;
+    if ((as &#x3D; counterCells) !&#x3D; null ||
+        !U.compareAndSwapLong(this, BASECOUNT, b &#x3D; baseCount, s &#x3D; b + x)) &#123;
+        CounterCell a; long v; int m;
+        boolean uncontended &#x3D; true;
+        if (as &#x3D;&#x3D; null || (m &#x3D; as.length - 1) &lt; 0 ||
+            (a &#x3D; as[ThreadLocalRandom.getProbe() &amp; m]) &#x3D;&#x3D; null ||
+            !(uncontended &#x3D;
+              U.compareAndSwapLong(a, CELLVALUE, v &#x3D; a.value, v + x))) &#123;
+            fullAddCount(x, uncontended);
+            return;
+        &#125;
+        if (check &lt;&#x3D; 1)
+            return;
+        s &#x3D; sumCount();
+    &#125;
+    if (check &gt;&#x3D; 0) &#123;
+        Node&lt;K,V&gt;[] tab, nt; int n, sc;
+        while (s &gt;&#x3D; (long)(sc &#x3D; sizeCtl) &amp;&amp; (tab &#x3D; table) !&#x3D; null &amp;&amp;
+               (n &#x3D; tab.length) &lt; MAXIMUM_CAPACITY) &#123;
+            int rs &#x3D; resizeStamp(n);
+            if (sc &lt; 0) &#123;
+                if ((sc &gt;&gt;&gt; RESIZE_STAMP_SHIFT) !&#x3D; rs || sc &#x3D;&#x3D; rs + 1 ||
+                    sc &#x3D;&#x3D; rs + MAX_RESIZERS || (nt &#x3D; nextTable) &#x3D;&#x3D; null ||
+                    transferIndex &lt;&#x3D; 0)
+                    break;
+                if (U.compareAndSwapInt(this, SIZECTL, sc, sc + 1))
+                    transfer(tab, nt);
+            &#125;
+            else if (U.compareAndSwapInt(this, SIZECTL, sc,
+                                         (rs &lt;&lt; RESIZE_STAMP_SHIFT) + 2))
+                transfer(tab, null);
+            s &#x3D; sumCount();
+        &#125;
+    &#125;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="remove方法"><a href="#remove方法" class="headerlink" title="remove方法"></a>remove方法</h2><p>删除操作属于<strong>写类型的</strong>操作，所以在进行删除的时候需要对table中的index位置加锁，ConcurrentHashMap使用<strong>synchronized</strong>关键字将table中的index位置锁住，然后进行删除，remove方法调用了replaceNode方法来进行实际的操作，而删除操作的步骤首先依然是计算记录的hashCode，然后根据hashCode来计算table中的index值，然后根据table中的index位置上是一条链表还是一棵红黑树来使用不同的方法来删除这个记录，删除记录的操作需要进行记录数量的更新（调用addCount方法进行）。</p>
+<p><strong>代码实现和put类似</strong></p>
+<pre class="line-numbers language-none"><code class="language-none">public V remove(Object key) &#123;
+    return replaceNode(key, null, null);
+&#125;
+
+&#x2F;**
+ * Implementation for the four public remove&#x2F;replace methods:
+ * Replaces node value with v, conditional upon match of cv if
+ * non-null.  If resulting value is null, delete.
+ *&#x2F;
+final V replaceNode(Object key, V value, Object cv) &#123;
+    int hash &#x3D; spread(key.hashCode());
+    for (Node&lt;K,V&gt;[] tab &#x3D; table;;) &#123;
+        Node&lt;K,V&gt; f; int n, i, fh;
+        if (tab &#x3D;&#x3D; null || (n &#x3D; tab.length) &#x3D;&#x3D; 0 ||
+            (f &#x3D; tabAt(tab, i &#x3D; (n - 1) &amp; hash)) &#x3D;&#x3D; null)
+            break;
+        else if ((fh &#x3D; f.hash) &#x3D;&#x3D; MOVED)
+            tab &#x3D; helpTransfer(tab, f);
+        else &#123;
+            V oldVal &#x3D; null;
+            boolean validated &#x3D; false;
+            synchronized (f) &#123;
+                if (tabAt(tab, i) &#x3D;&#x3D; f) &#123;
+                    if (fh &gt;&#x3D; 0) &#123;
+                        validated &#x3D; true;
+                        for (Node&lt;K,V&gt; e &#x3D; f, pred &#x3D; null;;) &#123;
+                            K ek;
+                            if (e.hash &#x3D;&#x3D; hash &amp;&amp;
+                                ((ek &#x3D; e.key) &#x3D;&#x3D; key ||
+                                 (ek !&#x3D; null &amp;&amp; key.equals(ek)))) &#123;
+                                V ev &#x3D; e.val;
+                                if (cv &#x3D;&#x3D; null || cv &#x3D;&#x3D; ev ||
+                                    (ev !&#x3D; null &amp;&amp; cv.equals(ev))) &#123;
+                                    oldVal &#x3D; ev;
+                                    if (value !&#x3D; null)
+                                        e.val &#x3D; value;
+                                    else if (pred !&#x3D; null)
+                                        pred.next &#x3D; e.next;
+                                    else
+                                        setTabAt(tab, i, e.next);
+                                &#125;
+                                break;
+                            &#125;
+                            pred &#x3D; e;
+                            if ((e &#x3D; e.next) &#x3D;&#x3D; null)
+                                break;
+                        &#125;
+                    &#125;
+                    else if (f instanceof TreeBin) &#123;
+                        validated &#x3D; true;
+                        TreeBin&lt;K,V&gt; t &#x3D; (TreeBin&lt;K,V&gt;)f;
+                        TreeNode&lt;K,V&gt; r, p;
+                        if ((r &#x3D; t.root) !&#x3D; null &amp;&amp;
+                            (p &#x3D; r.findTreeNode(hash, key, null)) !&#x3D; null) &#123;
+                            V pv &#x3D; p.val;
+                            if (cv &#x3D;&#x3D; null || cv &#x3D;&#x3D; pv ||
+                                (pv !&#x3D; null &amp;&amp; cv.equals(pv))) &#123;
+                                oldVal &#x3D; pv;
+                                if (value !&#x3D; null)
+                                    p.val &#x3D; value;
+                                else if (t.removeTreeNode(p))
+                                    setTabAt(tab, i, untreeify(t.first));
+                            &#125;
+                        &#125;
+                    &#125;
+                &#125;
+            &#125;
+            if (validated) &#123;
+                if (oldVal !&#x3D; null) &#123;
+                    if (value &#x3D;&#x3D; null)
+                        addCount(-1L, -1);
+                    return oldVal;
+                &#125;
+                break;
+            &#125;
+        &#125;
+    &#125;
+    return null;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+                
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        文章作者:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="/about" rel="external nofollow noreferrer">Bxan</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        文章链接:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="http://anbingxu666.com/2018/11/27/Java8%E4%B8%8B%E7%9A%84ConcurrentHashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">http://anbingxu666.com/2018/11/27/Java8%E4%B8%8B%E7%9A%84ConcurrentHashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        版权声明:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    本博客所有文章除特別声明外，均采用
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
+                    许可协议。转载请注明来源
+                    <a href="/about" target="_blank">Bxan</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/Java8/">
+                                    <span class="chip bg-color">Java8</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+    <div class="social-share" data-sites="twitter,facebook,google,qq,qzone,wechat,weibo,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+                <style>
+    #reward {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    #reward .reward-link {
+        font-size: 1.4rem;
+        line-height: 38px;
+    }
+
+    #reward .btn-floating:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #rewardModal {
+        width: 320px;
+        height: 350px;
+    }
+
+    #rewardModal .reward-title {
+        margin: 15px auto;
+        padding-bottom: 5px;
+    }
+
+    #rewardModal .modal-content {
+        padding: 10px;
+    }
+
+    #rewardModal .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.3rem;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    #rewardModal .close:hover {
+        color: #ef5350;
+        transform: scale(1.3);
+        -moz-transform:scale(1.3);
+        -webkit-transform:scale(1.3);
+        -o-transform:scale(1.3);
+    }
+
+    #rewardModal .reward-tabs {
+        margin: 0 auto;
+        width: 210px;
+    }
+
+    .reward-tabs .tabs {
+        height: 38px;
+        margin: 10px auto;
+        padding-left: 0;
+    }
+
+    .reward-content ul {
+        padding-left: 0 !important;
+    }
+
+    .reward-tabs .tabs .tab {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    .reward-tabs .tab a {
+        color: #fff;
+        background-color: #ccc;
+    }
+
+    .reward-tabs .tab a:hover {
+        background-color: #ccc;
+        color: #fff;
+    }
+
+    .reward-tabs .wechat-tab .active {
+        color: #fff !important;
+        background-color: #22AB38 !important;
+    }
+
+    .reward-tabs .alipay-tab .active {
+        color: #fff !important;
+        background-color: #019FE8 !important;
+    }
+
+    .reward-tabs .reward-img {
+        width: 210px;
+        height: 210px;
+    }
+</style>
+
+<div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-medium waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fas fa-times"></i></a>
+            <h4 class="reward-title">你的赏识是我前进的动力</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <div id="alipay">
+                        <img src="/medias/reward/alipay.jpg" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+            <div class="card">
+                <a href="/2018/12/05/Hadoop%E4%BC%AA%E5%88%86%E5%B8%83%E5%BC%8F%E7%9A%84%E4%BB%8E%E9%9B%B6%E6%90%AD%E5%BB%BA%E6%95%99%E7%A8%8B/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/6.jpg" class="responsive-img" alt="Hadoop伪分布式的从零搭建教程">
+                        
+                        <span class="card-title">Hadoop伪分布式的从零搭建教程</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2018-12-05
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/others/" class="post-category">
+                                    others
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/Java/">
+                        <span class="chip bg-color">Java</span>
+                    </a>
+                    
+                    <a href="/tags/Linux/">
+                        <span class="chip bg-color">Linux</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2018/11/27/jdk8%E4%B8%8B%E7%9A%84HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/15.jpg" class="responsive-img" alt="jdk8下的HashMap源码分析">
+                        
+                        <span class="card-title">jdk8下的HashMap源码分析</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2018-11-27
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/Java%E6%8A%80%E6%9C%AF/" class="post-category">
+                                    Java技术
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/Java8/">
+                        <span class="chip bg-color">Java8</span>
+                    </a>
+                    
+                    <a href="/tags/jdk/">
+                        <span class="chip bg-color">jdk</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget card" style="background-color: white;">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('0'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+
+    <footer class="page-footer bg-color">
+    
+    <div class="container row center-align" style="margin-bottom: 0px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            
+                <span id="year">2017-2021</span>
+            
+            <span id="year">2017</span>
+            <a href="/about" target="_blank">Bxan</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            <br>
+            
+            
+            
+            
+            <span id="busuanzi_container_site_pv">
+                |&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
+                    class="white-color"></span>&nbsp;次
+            </span>
+            
+            
+            <span id="busuanzi_container_site_uv">
+                |&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
+                    class="white-color"></span>&nbsp;人
+            </span>
+            
+            <br>
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link ">
+    <a href="https://github.com/anbingxu666" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fab fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:anbingxu666@163.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=976835150" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 976835150" data-position="top" data-delay="50">
+        <i class="fab fa-qq"></i>
+    </a>
+
+
+
+
+
+
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+    var searchFunc = function (path, search_id, content_id) {
+        'use strict';
+        $.ajax({
+            url: path,
+            dataType: "xml",
+            success: function (xmlResponse) {
+                // get the contents from search data
+                var datas = $("entry", xmlResponse).map(function () {
+                    return {
+                        title: $("title", this).text(),
+                        content: $("content", this).text(),
+                        url: $("url", this).text()
+                    };
+                }).get();
+                var $input = document.getElementById(search_id);
+                var $resultContent = document.getElementById(content_id);
+                $input.addEventListener('input', function () {
+                    var str = '<ul class=\"search-result-list\">';
+                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                    $resultContent.innerHTML = "";
+                    if (this.value.trim().length <= 0) {
+                        return;
+                    }
+                    // perform local searching
+                    datas.forEach(function (data) {
+                        var isMatch = true;
+                        var data_title = data.title.trim().toLowerCase();
+                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
+                        var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
+                        var index_title = -1;
+                        var index_content = -1;
+                        var first_occur = -1;
+                        // only match artiles with not empty titles and contents
+                        if (data_title !== '' && data_content !== '') {
+                            keywords.forEach(function (keyword, i) {
+                                index_title = data_title.indexOf(keyword);
+                                index_content = data_content.indexOf(keyword);
+                                if (index_title < 0 && index_content < 0) {
+                                    isMatch = false;
+                                } else {
+                                    if (index_content < 0) {
+                                        index_content = 0;
+                                    }
+                                    if (i === 0) {
+                                        first_occur = index_content;
+                                    }
+                                }
+                            });
+                        }
+                        // show search results
+                        if (isMatch) {
+                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + data_title + "</a>";
+                            var content = data.content.trim().replace(/<[^>]+>/g, "");
+                            if (first_occur >= 0) {
+                                // cut out 100 characters
+                                var start = first_occur - 20;
+                                var end = first_occur + 80;
+                                if (start < 0) {
+                                    start = 0;
+                                }
+                                if (start === 0) {
+                                    end = 100;
+                                }
+                                if (end > content.length) {
+                                    end = content.length;
+                                }
+                                var match_content = content.substr(start, end);
+                                // highlight all keywords
+                                keywords.forEach(function (keyword) {
+                                    var regS = new RegExp(keyword, "gi");
+                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
+                                });
+
+                                str += "<p class=\"search-result\">" + match_content + "...</p>"
+                            }
+                            str += "</li>";
+                        }
+                    });
+                    str += "</ul>";
+                    $resultContent.innerHTML = str;
+                });
+            }
+        });
+    };
+
+    searchFunc('/search.xml', 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    <script src="/libs/others/clicklove.js" async="async"></script>
+    
+    
+
+    
+
+    
+
+	
+    
+
+    
+
+    
+
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>
