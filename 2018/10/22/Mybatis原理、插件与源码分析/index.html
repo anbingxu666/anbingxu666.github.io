@@ -449,7 +449,7 @@ return executor;<span aria-hidden="true" class="line-numbers-rows"><span></span>
 
 <p>最终会返回一个 <strong>DefaultSqlSession()</strong> 包含了<strong>Conguration</strong>和<strong>Executor</strong></p>
 <h3 id="getMapper"><a href="#getMapper" class="headerlink" title="getMapper()"></a>getMapper()</h3><p> <strong>DefaultSqlSession()</strong>.getMapper(XXXMapper.class)</p>
-<p> —-&gt; configuration.<T>getMapper(type, this); </p>
+<p> —-&gt; configuration.<T>getMapper(type, this); </T></p>
 <p>——&gt;mapperRegistry.getMapper(type, sqlSession);</p>
 <p>——&gt;mapperProxyFactory.newInstance(sqlSession);  <strong>jdk动态代理</strong></p>
 <p>——&gt;返回MapperProxy代理对象</p>
@@ -536,7 +536,7 @@ protected T newInstance(MapperProxy&lt;T&gt; mapperProxy) &#123;
 <p>这里类似于openSession一样 <strong>有个拦截器插件interceptorChain作用于StatementHandler</strong></p>
 <pre class="line-numbers language-none"><code class="language-none">statementHandler &#x3D; (StatementHandler) interceptorChain.pluginAll(statementHandler);<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
-<p>—&gt;handler.<E>query(stmt, resultHandler);</p>
+<p>—&gt;handler.<E>query(stmt, resultHandler);</E></p>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@Override</span>
 <span class="token keyword">public</span> <span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">E</span><span class="token punctuation">></span></span> <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">E</span><span class="token punctuation">></span></span> <span class="token function">query</span><span class="token punctuation">(</span><span class="token class-name">Statement</span> statement<span class="token punctuation">,</span> <span class="token class-name">ResultHandler</span> resultHandler<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">SQLException</span> <span class="token punctuation">&#123;</span>
   <span class="token class-name">PreparedStatement</span> ps <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token class-name">PreparedStatement</span><span class="token punctuation">)</span> statement<span class="token punctuation">;</span>

@@ -469,7 +469,7 @@
 <p>3.为每个Criteria对象添加查询条件（创建Criterion 把它加入Criteria数组中）</p>
 <p>4.增加<strong>or</strong>条件： 只有第一个Criteria对象会被加入到oredCriteria数组中 ，所以需要使用<strong>XXXExample</strong>.or()方法把接下来每个语句添加到oredCriteria数组中</p>
 <p>5.通过动态sql语句把XXXExample当做参数执行查询</p>
-<h3 id="oredCriteria"><a href="#oredCriteria" class="headerlink" title="oredCriteria"></a>oredCriteria</h3><p>这是一个 List<Criteria> 的数组 在sql中每个 Criteria之间的用 <strong>or</strong> 联系</p>
+<h3 id="oredCriteria"><a href="#oredCriteria" class="headerlink" title="oredCriteria"></a>oredCriteria</h3><p>这是一个 List<Criteria> 的数组 在sql中每个 Criteria之间的用 <strong>or</strong> 联系</Criteria></p>
 <h3 id="Criteria"><a href="#Criteria" class="headerlink" title="Criteria"></a>Criteria</h3><p>在每次通过createCriteria创建一个criteria的时候 都会新建一个Criteria实例 并且添加到oredCriteria数组中</p>
 <pre class="line-numbers language-none"><code class="language-none">public Criteria createCriteria() &#123;
     Criteria criteria &#x3D; createCriteriaInternal();&#x2F;&#x2F;仅仅创建并返回一个Criteria对象
@@ -492,7 +492,7 @@ protected GeneratedCriteria() &#123;
     criteria &#x3D; new ArrayList&lt;Criterion&gt;();
 &#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<p>我们可以说每个Criteria中最重要的数据成员是List<Criterion> criteria; </p>
+<p>我们可以说每个Criteria中最重要的数据成员是List<Criterion> criteria; </Criterion></p>
 <p>我们每次通过andXXXXXXX语句增加的条件全都被保存到了Criterion中 ，进而在保存到Criteria中</p>
 <h3 id="Criterion"><a href="#Criterion" class="headerlink" title="Criterion"></a>Criterion</h3><p>关键字段condition和value  前者代表sql语句 后者代表sql语句跟随的参数</p>
 <p>![屏幕快照 2018-10-20 下午7.19.03](Mybatis-Geneator-深入探索/屏幕快照 2018-10-20 下午7.19.03.png)</p>
@@ -538,7 +538,7 @@ protected GeneratedCriteria() &#123;
 
 
 
-<h3 id=""><a href="#" class="headerlink" title=""></a></h3>
+<h3 id><a href="#" class="headerlink" title></a></h3>
                 
             </div>
             <hr/>

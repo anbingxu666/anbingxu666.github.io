@@ -484,7 +484,7 @@ oracle数据库的主键是从序列中拿到的
 select 的返回值是列表。resultType&#x3D;&quot;user&quot; resultType对象仍然要写pojo mybatis会自动封装成列表并返回
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <!--返回值类型写  list内存放的元素类型-->
-<select id="selectListById" resultType="user" >
+<select id="selectListById" resulttype="user">
     select * from user
 </select>
 <pre class="line-numbers language-none"><code class="language-none">
@@ -494,7 +494,7 @@ select 的返回值是列表。resultType&#x3D;&quot;user&quot; resultType对象
 @MapKey("name")
 Map<String,User> selectByIdReturnMap(Integer id);
 <pre class="line-numbers language-none"><code class="language-none"><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<select id="selectByIdReturnMap" resultType="user" parameterType="int">
+<select id="selectByIdReturnMap" resulttype="user" parametertype="int">
     select * from user
 </select>
 <pre class="line-numbers language-none"><code class="language-none">
@@ -503,7 +503,7 @@ Map<String,User> selectByIdReturnMap(Integer id);
 Map<String,Object> selectByIdToMap(Integer id);
 <pre class="line-numbers language-none"><code class="language-none"><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <!--{password=123456, name=an, id=1} 我们查出的是这种 我们想要的是Map<String,User>-->
-<select id="selectByIdToMap" resultType="map" parameterType="int">
+<select id="selectByIdToMap" resulttype="map" parametertype="int">
     select * from user where id = #{id}
 </select>
 <pre class="line-numbers language-none"><code class="language-none">
@@ -674,7 +674,7 @@ from address
 left join user on address.id = user.address_id where address.id=#&#123;id&#125;;
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>select</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<h2 id=""><a href="#" class="headerlink" title=""></a></h2><h2 id="查询语句参数传递规则"><a href="#查询语句参数传递规则" class="headerlink" title="查询语句参数传递规则"></a>查询语句参数传递规则</h2><h3 id="单个参数"><a href="#单个参数" class="headerlink" title="单个参数"></a>单个参数</h3><pre class="line-numbers language-#&#123;name&#125;" data-language="#&#123;name&#125;"><div class="caption"><span>``` name随便写什么都可以 Mybatis不会做特殊处理</span></div><code class="language-#&#123;name&#125;">
+<h2 id><a href="#" class="headerlink" title></a></h2><h2 id="查询语句参数传递规则"><a href="#查询语句参数传递规则" class="headerlink" title="查询语句参数传递规则"></a>查询语句参数传递规则</h2><h3 id="单个参数"><a href="#单个参数" class="headerlink" title="单个参数"></a>单个参数</h3><pre class="line-numbers language-#&#123;name&#125;" data-language="#&#123;name&#125;"><div class="caption"><span>``` name随便写什么都可以 Mybatis不会做特殊处理</span></div><code class="language-#&#123;name&#125;">
 ### 多个参数
 
 Usermapperx.xml中的代码
@@ -715,7 +715,7 @@ Caused by: org.apache.ibatis.binding.BindingException: Parameter &#39;name&#39; 
 <p>Key：   Collection ——&gt; collection</p>
 <p>​             list        ——&gt;list</p>
 <p>​           array.  ——&gt;array</p>
-<p>比如public User getUserById(List<Integer> ids);</p>
+<p>比如public User getUserById(List<Integer> ids);</Integer></p>
 <p>​    若要取出第一个id的值 使用 #{list[0]}</p>
 <h2 id="Mybatis参数Mapper-Param-“”-底层原理"><a href="#Mybatis参数Mapper-Param-“”-底层原理" class="headerlink" title="Mybatis参数Mapper ,@Param(“”)底层原理"></a>Mybatis参数Mapper ,@Param(“”)底层原理</h2><p>查看 MapperMethod.java 源代码</p>
 <pre class="line-numbers language-none"><code class="language-none">Object param &#x3D; method.convertArgsToSqlCommandParam(args);<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
@@ -792,7 +792,7 @@ Caused by: org.apache.ibatis.binding.BindingException: Parameter &#39;name&#39; 
 
 <h4 id="name-1"><a href="#name-1" class="headerlink" title="${name}"></a>${name}</h4><p>可以获得参数的值或pojo的值，直接将参数拼接到sql语句中，可能会有安全问题</p>
 <p>在原生jdbc不支持占位符号的时候 我们可以使用#{}  比如：order by ${name}</p>
-
+</String,Object></String,User>
                 
             </div>
             <hr/>

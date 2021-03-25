@@ -439,7 +439,7 @@
 <li>调用bean实例的初始化方法(destory-method)</li>
 </ol>
 <p>可以看到，Spring容器通过BeanPostProcessor给了我们一个机会对Spring管理的bean在进行bean<strong>调用inti-method前后</strong>再加工。比如：我们可以修改bean的属性，可以给bean生成一个动态代理实例等等。一些Spring AOP的底层处理也是通过实现BeanPostProcessor来执行代理包装逻辑的。</p>
-<h3 id="使用方法："><a href="#使用方法：" class="headerlink" title="使用方法："></a>使用方法：</h3><p><strong>创建一个实现BeanPostProcessor接口的类，实现上述的两种方法；在xml配置文件中写入<bean class="创建的实现类"/></strong></p>
+<h3 id="使用方法："><a href="#使用方法：" class="headerlink" title="使用方法："></a>使用方法：</h3><p><strong>创建一个实现BeanPostProcessor接口的类，实现上述的两种方法；在xml配置文件中写入<bean class="创建的实现类"></bean></strong></p>
 <p>在实现BeanPostProcessor接口的类的两种方法中 Object bean, String beanName 。 bean代表bean的实例本身，beanName代表bean的名字。返回值即放回到容器中的bean可以随意修改的！</p>
 <p>如：</p>
 <pre class="line-numbers language-xml" data-language="xml"><code class="language-xml"><span class="token comment">&lt;!--不需要进行特殊配置 ioc容器会自动识别--></span>

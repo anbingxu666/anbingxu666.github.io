@@ -481,14 +481,14 @@
 
 
 &lt;&#x2F;project&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h3 id="目录结构"><a href="#目录结构" class="headerlink" title="目录结构"></a>目录结构</h3><p><img src="photo/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202018-10-12%20%E4%B8%8B%E5%8D%887.39.09.png" alt="屏幕快照 2018-10-12 下午7.39.09"></p>
+<h3 id="目录结构"><a href="#目录结构" class="headerlink" title="目录结构"></a>目录结构</h3><p><img src="/2018/10/12/Mybatis%E5%85%A5%E9%97%A8%E4%B9%8B%E7%AE%80%E5%8D%95%E9%85%8D%E7%BD%AE%E5%8F%8A%E6%A1%88%E4%BE%8B/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202018-10-12%20%E4%B8%8B%E5%8D%887.39.09.png" alt="屏幕快照 2018-10-12 下午7.39.09"></p>
 <h2 id="2-编写数据库配置文件"><a href="#2-编写数据库配置文件" class="headerlink" title="2.编写数据库配置文件"></a>2.编写数据库配置文件</h2><p>db.properties (因为不是配置在xml中 所以这里的&amp;可以不使用转义前的形式)</p>
 <pre class="line-numbers language-none"><code class="language-none">jdbc.username&#x3D;root
 jdbc.password&#x3D;mysql123
 jdbc.driver&#x3D;com.mysql.cj.jdbc.Driver
 jdbc.url&#x3D;jdbc:mysql:&#x2F;&#x2F;localhost:3306&#x2F;login?useUnicode&#x3D;true&amp;characterEncoding&#x3D;utf8&amp;useSSL&#x3D;false<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 
-<h2 id="编写Mybatis的配置文件"><a href="#编写Mybatis的配置文件" class="headerlink" title="编写Mybatis的配置文件"></a>编写Mybatis的配置文件</h2><h3 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h3><properties resource="db.properties"/>
+<h2 id="编写Mybatis的配置文件"><a href="#编写Mybatis的配置文件" class="headerlink" title="编写Mybatis的配置文件"></a>编写Mybatis的配置文件</h2><h3 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h3><properties resource="db.properties">
 
 <p>上述代表了数据库配置资源文件的位置（相对位置）</p>
 <pre class="line-numbers language-none"><code class="language-none">&lt;property name&#x3D;&quot;driver&quot; value&#x3D;&quot;$&#123;jdbc.driver&#125;&quot; &#x2F;&gt;
@@ -652,7 +652,7 @@ public class Main &#123;
         System.out.println(user);
 
     &#125;
-&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></properties>
                 
             </div>
             <hr/>

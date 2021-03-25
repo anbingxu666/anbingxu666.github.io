@@ -428,7 +428,7 @@
                 <h1 id="Spring之静态工厂方法"><a href="#Spring之静态工厂方法" class="headerlink" title="Spring之静态工厂方法"></a>Spring之静态工厂方法</h1><p><strong>通过调用静态工厂方法创建 bean：</strong></p>
 <ul>
 <li>调用静态工厂方法创建 bean 是将对象创建的过程封装到静态方法中 , 当客户端需要对象时 , 只需要简单地调用静态方法 , 而不需要关心创建对象的细节。</li>
-<li>要声明通过静态方法创建的 bean , 需要在 bean 的 class 属性里面指定拥有该工厂的方法的类 , 同时在 factory-method 属性里指定工厂方法的名称。最后 , 使用 <constructor-arg> 元素为该方法传递方法参数。</li>
+<li>要声明通过静态方法创建的 bean , 需要在 bean 的 class 属性里面指定拥有该工厂的方法的类 , 同时在 factory-method 属性里指定工厂方法的名称。最后 , 使用 <constructor-arg> 元素为该方法传递方法参数。</constructor-arg></li>
 </ul>
 <p>spring的配置文件</p>
 <pre class="line-numbers language-xml" data-language="xml"><code class="language-xml"><span class="token prolog">&lt;?xml version="1.0" encoding="UTF-8"?></span>

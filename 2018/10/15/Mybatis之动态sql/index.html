@@ -483,7 +483,7 @@
     &lt;&#x2F;if&gt;
 &lt;&#x2F;where&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<p>​    方法3: 通过<trim>标签 设置前缀后缀来解决</p>
+<p>​    方法3: 通过<trim>标签 设置前缀后缀来解决</trim></p>
 <h3 id="choose"><a href="#choose" class="headerlink" title="choose"></a>choose</h3><p>只会选择其中的一条语句 有点想java中的switch case break</p>
 <pre class="line-numbers language-xml" data-language="xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>select</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>getUsersByConditionChoose<span class="token punctuation">"</span></span> <span class="token attr-name">resultType</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>user<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
     select * from user
@@ -566,7 +566,7 @@
     select * from user where name like #&#123;_word&#125;;
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>select</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 
-<h3 id="sql"><a href="#sql" class="headerlink" title="sql"></a>sql</h3><p>可以将sql语句封装为一个变量<sql id="sqlname">sql语句</sql>，使用时通过引用就可以用<include refid="sqlname"/></p>
+<h3 id="sql"><a href="#sql" class="headerlink" title="sql"></a>sql</h3><p>可以将sql语句封装为一个变量<sql id="sqlname">sql语句</sql>，使用时通过引用就可以用<include refid="sqlname"></include></p>
 <p>注意：若在sql标签内定义了property 取值的时候 要用**${}**</p>
 
                 
