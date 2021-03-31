@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="Hello World, Bxan&#39;s Blog">
+    <meta name="keywords" content="Spring Boot自动配置原理分析, Bxan&#39;s Blog">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>Hello World | Bxan&#39;s Blog</title>
+    <title>Spring Boot自动配置原理分析 | Bxan&#39;s Blog</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -247,12 +247,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/12.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/21.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">Hello World</h1>
+                    <h1 class="description center-align post-title">Spring Boot自动配置原理分析</h1>
                 </div>
             </div>
         </div>
@@ -366,9 +366,17 @@
             <div class="row tag-cate">
                 <div class="col s7">
                     
-                          <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
-                          </div>
+                    <div class="article-tag">
+                        
+                            <a href="/tags/Java/">
+                                <span class="chip bg-color">Java</span>
+                            </a>
+                        
+                            <a href="/tags/Spring-Boot/">
+                                <span class="chip bg-color">Spring Boot</span>
+                            </a>
+                        
+                    </div>
                     
                 </div>
                 <div class="col s5 right-align">
@@ -380,7 +388,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2021-03-24
+                    2021-03-30
                 </div>
                 
 
@@ -404,19 +412,61 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ hexo new <span class="token string">"My New Post"</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+                <h1 id="Spring-Boot自动配置原理"><a href="#Spring-Boot自动配置原理" class="headerlink" title="Spring Boot自动配置原理"></a>Spring Boot自动配置原理</h1><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><ol>
+<li>首先是通过@SpringBootApplication注解标注启动类启动Springboot应用。</li>
+<li>@SpringBootApplication内被@EnableAutoConfiguration标注。</li>
+<li>右@EnableAutoConfiguration注解内的@Import(AutoConfigurationImportSelector.class)加载配置信息。</li>
+<li>AutoConfigurationImportSelector.class实现了ImportSelect接口的selectImports()方法，该方法会读取所有路径下的META-INF/spring.factories。</li>
+<li>读取spring.factories完毕后会扫描所有自动配置类，通过spring容器实现自动配置。</li>
+</ol>
+<h3 id="出发点-SpringBootApplication"><a href="#出发点-SpringBootApplication" class="headerlink" title="出发点@SpringBootApplication"></a>出发点@SpringBootApplication</h3><p>![屏幕快照 2020-06-11 09.59.31](Spring-Boot自动配置原理分析/屏幕快照 2020-06-11 09.59.31.png)</p>
+<p>@SpringBootApplication注解内部，依赖多个注解，大部分注解都是java的常规注解，看命名就能发现@EnableAutoConfiguration这个注解应该是我们想要的，所以继续看这个注解。</p>
+<h3 id="深入-EnableAutoConfiguration"><a href="#深入-EnableAutoConfiguration" class="headerlink" title="深入@EnableAutoConfiguration"></a>深入@EnableAutoConfiguration</h3><ol>
+<li>@SpringBootApplication的源码</li>
+</ol>
+<p>![屏幕快照 2020-06-11 10.00.02](Spring-Boot自动配置原理分析/屏幕快照 2020-06-11 10.00.02.png)</p>
+<p>@EnableAutoConfiguration注解被两个注解标注<strong>一个是@AutoConfigurationPackage注解，一个是@import一个类：AutoConfigurationImportSelector.class</strong></p>
+<ol start="2">
+<li>@EnableAutoConfiguration的源码</li>
+</ol>
+<p>![屏幕快照 2020-06-11 10.01.12](Spring-Boot自动配置原理分析/屏幕快照 2020-06-11 10.01.12.png)</p>
+<p>@AutoConfigurationPackage注解的功能：启动自动配置,该注解开启,使用Spring boot启动项目时,就会把找的jar包,自动配置整合。</p>
+<ol start="3">
+<li>AutoConfigurationImportSelector.class的源码</li>
+</ol>
+<p>该类一共实现了6个接口</p>
+<p>![屏幕快照 2020-06-11 10.05.02](Spring-Boot自动配置原理分析/屏幕快照 2020-06-11 10.05.02-1841137.png)</p>
+<p>第一个接口@DeferredImportSelector，他还继承一个父接口：ImportSelect</p>
+<p>![屏幕快照 2020-06-11 10.07.27](Spring-Boot自动配置原理分析/屏幕快照 2020-06-11 10.07.27.png)</p>
+<p>@ImportSelect主要作用是收集需要导入的配置类，如果该接口的实现类同时实现EnvironmentAware， BeanFactoryAware ，BeanClassLoaderAware或者ResourceLoaderAware，那么在调用其selectImports方法之前先调用上述接口中对应的方法，如果需要在所有的@Configuration处理完在导入时可以实现DeferredImportSelector接口。</p>
+<p><strong>4. 实现该接口的方法：selectImports()</strong></p>
+<p>![屏幕快照 2020-06-11 10.09.17](Spring-Boot自动配置原理分析/屏幕快照 2020-06-11 10.09.17.png)</p>
+<p>该方法内部掉用了一个getAutoConfigurationEntry()方法，深入其内部查看源码</p>
+<p>![屏幕快照 2020-06-11 10.09.56](Spring-Boot自动配置原理分析/屏幕快照 2020-06-11 10.09.56.png)</p>
+<p>核心在与获取的<strong>configurations</strong>，我们会发现途中圈出的这行代码之后的操作，都是围绕configurations这个对象来进行的。</p>
+<p><strong>5. getCandidateConfigurations（）方法</strong></p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">protected</span> <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">></span></span> <span class="token function">getCandidateConfigurations</span><span class="token punctuation">(</span><span class="token class-name">AnnotationMetadata</span> metadata<span class="token punctuation">,</span> <span class="token class-name">AnnotationAttributes</span> attributes<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+	<span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">></span></span> configurations <span class="token operator">=</span> <span class="token class-name">SpringFactoriesLoader</span><span class="token punctuation">.</span><span class="token function">loadFactoryNames</span><span class="token punctuation">(</span><span class="token function">getSpringFactoriesLoaderFactoryClass</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+			<span class="token function">getBeanClassLoader</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token class-name">Assert</span><span class="token punctuation">.</span><span class="token function">notEmpty</span><span class="token punctuation">(</span>configurations<span class="token punctuation">,</span> <span class="token string">"No auto configuration classes found in META-INF/spring.factories. If you "</span>
+			<span class="token operator">+</span> <span class="token string">"are using a custom packaging, make sure that file is correct."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token keyword">return</span> configurations<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ hexo server<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ hexo generate<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ hexo deploy<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+<p>核心在于SpringFactoriesLoader.loadFactoryNames()这个方法,通过该方法加载配置。</p>
+<ol start="6">
+<li>SpringFactoriesLoader.loadFactoryNames()方法</li>
+</ol>
+<p><strong>核心来了，在该方法中会读取META-INF/spring.factories下的所有内容</strong></p>
+<p>classLoader.getResources(“META-INF/spring.factories”) : ClassLoader.getSystemResources(“META-INF/spring.factories”);</p>
+<p>![屏幕快照 2020-06-11 10.16.37](Spring-Boot自动配置原理分析/屏幕快照 2020-06-11 10.16.37.png)</p>
+<p><strong>而每个META-INF/spring.factories则是spring-boot-autoconfiguration这个jar内部的spring.factories，该文件中包含了所有需要自动配置的类</strong></p>
+<p>![屏幕快照 2020-06-11 10.21.27](Spring-Boot自动配置原理分析/屏幕快照 2020-06-11 10.21.27.png)</p>
+<p>![屏幕快照 2020-06-11 10.21.51](Spring-Boot自动配置原理分析/屏幕快照 2020-06-11 10.21.51.png)</p>
+<p>springboot服务，通过服务入口类的注解，实现自动配置能力，实现的流程时，在启动时，会去扫描resources/META-INF路径下的spring.factories里的自动配置类，从而实现类的自动配置。</p>
+<h3 id="最终实现类的自动配置"><a href="#最终实现类的自动配置" class="headerlink" title="最终实现类的自动配置"></a>最终实现类的自动配置</h3><p>详情请参考文章XXXX，看如何编写一个自动配置类，并且使用它，对于理解Spring Boot的自动配置更加有帮助。</p>
+<h2 id="参考资源"><a href="#参考资源" class="headerlink" title="参考资源"></a>参考资源</h2><p>1.<a target="_blank" rel="noopener" href="https://docs.spring.io/spring-boot/docs/2.1.15.BUILD-SNAPSHOT/reference/html/common-application-properties.html">配置参照</a></p>
+<p>2.<a target="_blank" rel="noopener" href="https://www.cnblogs.com/trey/p/10053459.html">https://www.cnblogs.com/trey/p/10053459.html</a></p>
 
                 
             </div>
@@ -443,7 +493,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://anbingxu666.com/2021/03/24/hello-world/">http://anbingxu666.com/2021/03/24/hello-world/</a>
+                    <a href="http://anbingxu666.com/2021/03/30/Spring-Boot%E8%87%AA%E5%8A%A8%E9%85%8D%E7%BD%AE%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/">http://anbingxu666.com/2021/03/30/Spring-Boot%E8%87%AA%E5%8A%A8%E9%85%8D%E7%BD%AE%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -480,7 +530,15 @@
                 <div class="post-meta__tag-list" style="display: inline-block;">
                     
                         <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
+                            
+                                <a href="/tags/Java/">
+                                    <span class="chip bg-color">Java</span>
+                                </a>
+                            
+                                <a href="/tags/Spring-Boot/">
+                                    <span class="chip bg-color">Spring Boot</span>
+                                </a>
+                            
                         </div>
                     
                 </div>
@@ -648,17 +706,18 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
-                <a href="/2021/03/24/AQS%E5%8E%9F%E7%90%86%E5%92%8C%E4%BD%BF%E7%94%A8/">
+                <a href="/2021/03/30/Spring-Boot%E8%87%AA%E5%8A%A8%E9%85%8D%E7%BD%AE%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/19.jpg" class="responsive-img" alt="AQS原理和使用">
+                        <img src="/medias/featureimages/21.jpg" class="responsive-img" alt="Spring Boot自动配置原理分析">
                         
-                        <span class="card-title">AQS原理和使用</span>
+                        <span class="card-title">Spring Boot自动配置原理分析</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -668,9 +727,9 @@
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2021-03-24
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-03-30
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-user fa-fw"></i>
@@ -678,6 +737,19 @@
                             
                         </span>
                     </div>
+                </div>
+
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/Java/">
+                        <span class="chip bg-color">Java</span>
+                    </a>
+                    
+                    <a href="/tags/Spring-Boot/">
+                        <span class="chip bg-color">Spring Boot</span>
+                    </a>
+                    
                 </div>
                 
             </div>
@@ -689,13 +761,13 @@
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2020/07/22/Java%E7%BA%BF%E7%A8%8B%E4%B8%AD%E7%9A%84%E5%B8%B8%E8%A7%81%E6%96%B9%E6%B3%95%E8%AF%A6%E8%A7%A3/">
+                <a href="/2021/03/27/%E9%99%90%E6%B5%81%E7%AE%97%E6%B3%95%EF%BC%9A%E6%BC%8F%E6%96%97%E7%AE%97%E6%B3%95%E5%92%8C%E4%BB%A4%E7%89%8C%E6%A1%B6%E7%AE%97%E6%B3%95/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/1.jpg" class="responsive-img" alt="Java线程中的常见方法详解">
+                        <img src="/medias/featureimages/9.jpg" class="responsive-img" alt="限流算法：漏斗算法和令牌桶算法">
                         
-                        <span class="card-title">Java线程中的常见方法详解</span>
+                        <span class="card-title">限流算法：漏斗算法和令牌桶算法</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -706,16 +778,12 @@
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2020-07-22
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-03-27
                             </span>
                         <span class="publish-author">
                             
-                            <i class="fas fa-bookmark fa-fw icon-category"></i>
-                            
-                            <a href="/categories/Java%E5%B9%B6%E5%8F%91/" class="post-category">
-                                    Java并发
-                                </a>
-                            
+                            <i class="fas fa-user fa-fw"></i>
+                            Bxan
                             
                         </span>
                     </div>
@@ -723,12 +791,16 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/Java/">
-                        <span class="chip bg-color">Java</span>
-                    </a>
-                    
                     <a href="/tags/%E5%B9%B6%E5%8F%91/">
                         <span class="chip bg-color">并发</span>
+                    </a>
+                    
+                    <a href="/tags/%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/">
+                        <span class="chip bg-color">系统设计</span>
+                    </a>
+                    
+                    <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">
+                        <span class="chip bg-color">计算机网络</span>
                     </a>
                     
                 </div>

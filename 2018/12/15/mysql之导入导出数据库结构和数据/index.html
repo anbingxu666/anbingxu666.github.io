@@ -418,7 +418,7 @@
         <div class="card-content article-card-content">
             <div id="articleContent">
                 <h1 id="mysql导入导出sql文件"><a href="#mysql导入导出sql文件" class="headerlink" title="mysql导入导出sql文件"></a>mysql导入导出sql文件</h1><h2 id="window下"><a href="#window下" class="headerlink" title="window下"></a>window下</h2><h3 id="1-导出整个数据库"><a href="#1-导出整个数据库" class="headerlink" title="1.导出整个数据库"></a>1.导出整个数据库</h3><p>mysqldump -u 用户名 -p 数据库名 &gt; 导出的文件名<br>mysqldump -u dbuser -p dbname &gt; dbname.sql</p>
-<p><code>mysqldump -u root -p TravelSystem&gt; TravelSystem.sql</code></p>
+<p><code>mysqldump -u root -p lottery&gt; lottery_new.sql</code></p>
 <h3 id="2-导出一个表"><a href="#2-导出一个表" class="headerlink" title="2.导出一个表"></a>2.导出一个表</h3><p>mysqldump -u 用户名 -p 数据库名 表名&gt; 导出的文件名<br>mysqldump -u dbuser -p dbname users&gt; dbname_users.sql</p>
 <h3 id="3-导出一个数据库结构"><a href="#3-导出一个数据库结构" class="headerlink" title="3.导出一个数据库结构"></a>3.导出一个数据库结构</h3><p>mysqldump -u dbuser -p -d –add-drop-table dbname &gt;d:/dbname_db.sql<br>-d 没有数据 –add-drop-table 在每个create语句之前增加一个drop table</p>
 <h3 id="4-导入数据库"><a href="#4-导入数据库" class="headerlink" title="4.导入数据库"></a>4.导入数据库</h3><p>常用source 命令<br>进入mysql数据库控制台，如<br>mysql -u root -p<br>mysql&gt;use 数据库<br>然后使用source命令，后面参数为脚本文件(如这里用到的.sql)<br>mysql&gt;source d:/dbname.sql</p>
@@ -430,6 +430,7 @@
 <p>注：/usr/local/mysql/bin/  —&gt;  mysql的data目录</p>
 <h3 id="二、导入数据库"><a href="#二、导入数据库" class="headerlink" title="二、导入数据库"></a>二、导入数据库</h3><h4 id="1、首先建空数据库"><a href="#1、首先建空数据库" class="headerlink" title="1、首先建空数据库"></a>1、首先建空数据库</h4><p>mysql&gt;create database abc;</p>
 <h4 id="2、导入数据库"><a href="#2、导入数据库" class="headerlink" title="2、导入数据库"></a>2、导入数据库</h4><p>方法一：<br>（1）选择数据库<br>mysql&gt;use abc;<br>（2）设置数据库编码<br>mysql&gt;set names utf8;<br>（3）导入数据（注意sql文件的路径）<br>mysql&gt;source /home/abc/abc.sql;<br>方法二：<br>mysql -u用户名 -p密码 数据库名 &lt; 数据库名.sql<br>mysql -uabc_f -p abc &lt; abc.sql</p>
+<h3 id="scp"><a href="#scp" class="headerlink" title="scp"></a>scp</h3><p>scp -r <a href="mailto:&#114;&#x6f;&#x6f;&#x74;&#x40;&#x34;&#55;&#x2e;&#57;&#x33;&#x2e;&#56;&#x38;&#46;&#x36;&#55;">&#114;&#x6f;&#x6f;&#x74;&#x40;&#x34;&#55;&#x2e;&#57;&#x33;&#x2e;&#56;&#x38;&#46;&#x36;&#55;</a>:/root/lottery.sql /Users/bxan/Desktop</p>
 
                 
             </div>
