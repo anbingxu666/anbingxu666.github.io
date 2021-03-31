@@ -419,30 +419,30 @@
 <li>AutoConfigurationImportSelector.class实现了ImportSelect接口的selectImports()方法，该方法会读取所有路径下的META-INF/spring.factories。</li>
 <li>读取spring.factories完毕后会扫描所有自动配置类，通过spring容器实现自动配置。</li>
 </ol>
-<h3 id="出发点-SpringBootApplication"><a href="#出发点-SpringBootApplication" class="headerlink" title="出发点@SpringBootApplication"></a>出发点@SpringBootApplication</h3><p>![屏幕快照 2020-06-11 09.59.31](Spring-Boot自动配置原理分析/屏幕快照 2020-06-11 09.59.31.png)</p>
+<h3 id="出发点-SpringBootApplication"><a href="#出发点-SpringBootApplication" class="headerlink" title="出发点@SpringBootApplication"></a>出发点@SpringBootApplication</h3><p><img src="/2021/03/30/Spring-Boot%E8%87%AA%E5%8A%A8%E9%85%8D%E7%BD%AE%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A71.png" alt="屏幕快照1"></p>
 <p>@SpringBootApplication注解内部，依赖多个注解，大部分注解都是java的常规注解，看命名就能发现@EnableAutoConfiguration这个注解应该是我们想要的，所以继续看这个注解。</p>
 <h3 id="深入-EnableAutoConfiguration"><a href="#深入-EnableAutoConfiguration" class="headerlink" title="深入@EnableAutoConfiguration"></a>深入@EnableAutoConfiguration</h3><ol>
 <li>@SpringBootApplication的源码</li>
 </ol>
-<p>![屏幕快照 2020-06-11 10.00.02](Spring-Boot自动配置原理分析/屏幕快照 2020-06-11 10.00.02.png)</p>
+<p><img src="/2021/03/30/Spring-Boot%E8%87%AA%E5%8A%A8%E9%85%8D%E7%BD%AE%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72.png" alt="屏幕快照2"></p>
 <p>@EnableAutoConfiguration注解被两个注解标注<strong>一个是@AutoConfigurationPackage注解，一个是@import一个类：AutoConfigurationImportSelector.class</strong></p>
 <ol start="2">
 <li>@EnableAutoConfiguration的源码</li>
 </ol>
-<p>![屏幕快照 2020-06-11 10.01.12](Spring-Boot自动配置原理分析/屏幕快照 2020-06-11 10.01.12.png)</p>
+<p><img src="/2021/03/30/Spring-Boot%E8%87%AA%E5%8A%A8%E9%85%8D%E7%BD%AE%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A73.png" alt="屏幕快照3"></p>
 <p>@AutoConfigurationPackage注解的功能：启动自动配置,该注解开启,使用Spring boot启动项目时,就会把找的jar包,自动配置整合。</p>
 <ol start="3">
 <li>AutoConfigurationImportSelector.class的源码</li>
 </ol>
 <p>该类一共实现了6个接口</p>
-<p>![屏幕快照 2020-06-11 10.05.02](Spring-Boot自动配置原理分析/屏幕快照 2020-06-11 10.05.02-1841137.png)</p>
+<p><img src="/2021/03/30/Spring-Boot%E8%87%AA%E5%8A%A8%E9%85%8D%E7%BD%AE%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A74.png" alt="屏幕快照3"></p>
 <p>第一个接口@DeferredImportSelector，他还继承一个父接口：ImportSelect</p>
-<p>![屏幕快照 2020-06-11 10.07.27](Spring-Boot自动配置原理分析/屏幕快照 2020-06-11 10.07.27.png)</p>
+<p><img src="/2021/03/30/Spring-Boot%E8%87%AA%E5%8A%A8%E9%85%8D%E7%BD%AE%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A75.png" alt="屏幕快照 2020-06-11 10.07.27"></p>
 <p>@ImportSelect主要作用是收集需要导入的配置类，如果该接口的实现类同时实现EnvironmentAware， BeanFactoryAware ，BeanClassLoaderAware或者ResourceLoaderAware，那么在调用其selectImports方法之前先调用上述接口中对应的方法，如果需要在所有的@Configuration处理完在导入时可以实现DeferredImportSelector接口。</p>
 <p><strong>4. 实现该接口的方法：selectImports()</strong></p>
-<p>![屏幕快照 2020-06-11 10.09.17](Spring-Boot自动配置原理分析/屏幕快照 2020-06-11 10.09.17.png)</p>
+<p><img src="/2021/03/30/Spring-Boot%E8%87%AA%E5%8A%A8%E9%85%8D%E7%BD%AE%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A76.png" alt="屏幕快照 2020-06-11 10.09.17"></p>
 <p>该方法内部掉用了一个getAutoConfigurationEntry()方法，深入其内部查看源码</p>
-<p>![屏幕快照 2020-06-11 10.09.56](Spring-Boot自动配置原理分析/屏幕快照 2020-06-11 10.09.56.png)</p>
+<p><img src="/2021/03/30/Spring-Boot%E8%87%AA%E5%8A%A8%E9%85%8D%E7%BD%AE%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A77.png" alt="屏幕快照 2020-06-11 10.09.56"></p>
 <p>核心在与获取的<strong>configurations</strong>，我们会发现途中圈出的这行代码之后的操作，都是围绕configurations这个对象来进行的。</p>
 <p><strong>5. getCandidateConfigurations（）方法</strong></p>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">protected</span> <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">></span></span> <span class="token function">getCandidateConfigurations</span><span class="token punctuation">(</span><span class="token class-name">AnnotationMetadata</span> metadata<span class="token punctuation">,</span> <span class="token class-name">AnnotationAttributes</span> attributes<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
@@ -459,10 +459,10 @@
 </ol>
 <p><strong>核心来了，在该方法中会读取META-INF/spring.factories下的所有内容</strong></p>
 <p>classLoader.getResources(“META-INF/spring.factories”) : ClassLoader.getSystemResources(“META-INF/spring.factories”);</p>
-<p>![屏幕快照 2020-06-11 10.16.37](Spring-Boot自动配置原理分析/屏幕快照 2020-06-11 10.16.37.png)</p>
+<p><img src="/2021/03/30/Spring-Boot%E8%87%AA%E5%8A%A8%E9%85%8D%E7%BD%AE%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A78.png" alt="屏幕快照 2020-06-11 10.16.37"></p>
 <p><strong>而每个META-INF/spring.factories则是spring-boot-autoconfiguration这个jar内部的spring.factories，该文件中包含了所有需要自动配置的类</strong></p>
-<p>![屏幕快照 2020-06-11 10.21.27](Spring-Boot自动配置原理分析/屏幕快照 2020-06-11 10.21.27.png)</p>
-<p>![屏幕快照 2020-06-11 10.21.51](Spring-Boot自动配置原理分析/屏幕快照 2020-06-11 10.21.51.png)</p>
+<p><img src="/2021/03/30/Spring-Boot%E8%87%AA%E5%8A%A8%E9%85%8D%E7%BD%AE%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A79.png" alt="屏幕快照 2020-06-11 10.21.27"></p>
+<p><img src="/2021/03/30/Spring-Boot%E8%87%AA%E5%8A%A8%E9%85%8D%E7%BD%AE%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A710.png" alt="屏幕快照 2020-06-11 10.21.51"></p>
 <p>springboot服务，通过服务入口类的注解，实现自动配置能力，实现的流程时，在启动时，会去扫描resources/META-INF路径下的spring.factories里的自动配置类，从而实现类的自动配置。</p>
 <h3 id="最终实现类的自动配置"><a href="#最终实现类的自动配置" class="headerlink" title="最终实现类的自动配置"></a>最终实现类的自动配置</h3><p>详情请参考文章XXXX，看如何编写一个自动配置类，并且使用它，对于理解Spring Boot的自动配置更加有帮助。</p>
 <h2 id="参考资源"><a href="#参考资源" class="headerlink" title="参考资源"></a>参考资源</h2><p>1.<a target="_blank" rel="noopener" href="https://docs.spring.io/spring-boot/docs/2.1.15.BUILD-SNAPSHOT/reference/html/common-application-properties.html">配置参照</a></p>
